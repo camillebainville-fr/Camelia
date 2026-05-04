@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camélia — Conseil Patrimonial</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --creme:       #FAF7F2;
+    --creme-dark:  #F0EBE1;
+    --creme-mid:   #E8E0D3;
+    --rose:        #C9A09A;
+    --rose-light:  #E8C8C4;
+    --rose-pale:   #F5E8E6;
+    --rose-deep:   #8B5E58;
+    --noir:        #1A1614;
+    --noir-soft:   #2C2420;
+    --charcoal:    #3D3530;
+    --or:          #B8965A;
+    --or-light:    #D4B07A;
+    --text:        #2C2420;
+    --text-light:  #7A6E68;
+    --text-muted:  #A89E98;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--creme);
+    font-family: 'Jost', sans-serif;
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── FLEUR SVG décorative ── */
+  .camellia-bg {
+    position: fixed;
+    bottom: -100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--noir);
+    padding: 0 40px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-flower {
+    width: 28px;
+    height: 28px;
+    opacity: 0.9;
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--creme);
+    letter-spacing: 3px;
+    line-height: 1;
+  }
+
+  .logo-tagline {
+    font-size: 9px;
+    font-weight: 300;
+    color: var(--rose);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .header-pill {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .header-pill span { color: var(--rose-light); }
+
+  .header-actions { display: flex; gap: 10px; }
+
+  .btn {
+    border: none;
+    padding: 9px 20px;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .btn-rose {
+    background: var(--rose);
+    color: white;
+  }
+  .btn-rose:hover { background: var(--rose-deep); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .btn-outline:hover { color: var(--creme); border-color: rgba(255,255,255,0.3); }
+
+  /* ── LAYOUT ── */
+  main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── SIDEBAR ── */
+  aside {
+    width: 230px;
+    background: var(--noir-soft);
+    border-right: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .sidebar-header {
+    padding: 22px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .sidebar-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 14px;
+  }
+
+  .btn-new {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed rgba(201,160,154,0.3);
+    color: rgba(201,160,154,0.6);
+    padding: 10px 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-new:hover {
+    border-color: var(--rose);
+    color: var(--rose-light);
+    background: rgba(201,160,154,0.05);
+  }
+
+  .profils-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+
+  .profil-item {
+    padding: 13px 20px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .profil-item:hover { background: rgba(255,255,255,0.03); }
+
+  .profil-item.active {
+    background: rgba(201,160,154,0.08);
+    border-left-color: var(--rose);
+  }
+
+  .profil-nom {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(250,247,242,0.6);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .profil-item.active .profil-nom { color: var(--rose-light); }
+
+  .profil-meta {
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    font-weight: 300;
+  }
+
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .memory-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #5aab5a;
+    box-shadow: 0 0 5px #5aab5a;
+    flex-shrink: 0;
+  }
+
+  .memory-text {
+    font-size: 9px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 1px;
+    font-weight: 300;
+  }
+
+  /* ── CHAT ZONE ── */
+  .chat-zone {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--creme);
+  }
+
+  /* Welcome */
+  .welcome {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 40px;
+  }
+
+  .welcome-flower {
+    width: 80px;
+    height: 80px;
+    opacity: 0.25;
+  }
+
+  .welcome-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--charcoal);
+    letter-spacing: 2px;
+  }
+
+  .welcome-sub {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-align: center;
+    line-height: 2.2;
+  }
+
+  .welcome-sub em {
+    color: var(--rose);
+    font-style: normal;
+  }
+
+  /* Messages */
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 36px 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    scroll-behavior: smooth;
+  }
+
+  .messages::-webkit-scrollbar { width: 3px; }
+  .messages::-webkit-scrollbar-thumb { background: var(--creme-mid); border-radius: 2px; }
+
+  .message {
+    display: flex;
+    gap: 14px;
+    max-width: 780px;
+    animation: bloom 0.4s ease;
+  }
+
+  .message.user { flex-direction: row-reverse; align-self: flex-end; }
+
+  @keyframes bloom {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+    font-size: 14px;
+  }
+
+  .avatar.camelia-av {
+    background: var(--rose-pale);
+    border: 1px solid var(--rose-light);
+  }
+
+  .avatar.user-av {
+    background: var(--creme-dark);
+    border: 1px solid var(--creme-mid);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--text-light);
+  }
+
+  .bubble-wrap { max-width: 640px; }
+
+  .sender-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    color: var(--text-muted);
+  }
+
+  .message.user .sender-label { text-align: right; }
+  .message.camelia .sender-label { color: var(--rose-deep); }
+
+  .bubble {
+    padding: 16px 22px;
+    line-height: 1.8;
+    font-size: 13.5px;
+    font-weight: 300;
+    letter-spacing: 0.2px;
+  }
+
+  .message.camelia .bubble {
+    background: white;
+    border: 1px solid var(--creme-mid);
+    border-radius: 2px 16px 16px 16px;
+    box-shadow: 0 2px 16px rgba(44,36,32,0.06);
+    color: var(--text);
+  }
+
+  .message.user .bubble {
+    background: var(--noir);
+    color: rgba(250,247,242,0.85);
+    border-radius: 16px 2px 16px 16px;
+    font-size: 13px;
+  }
+
+  .bubble p { margin-bottom: 8px; }
+  .bubble p:last-child { margin-bottom: 0; }
+  .bubble strong { font-weight: 500; color: var(--noir); }
+
+  /* Typing */
+  .typing { display: flex; gap: 14px; animation: bloom 0.3s ease; }
+
+  .typing-bubble {
+    background: white;
+    border: 1px solid var(--creme-mid);
+    padding: 16px 22px;
+    border-radius: 2px 16px 16px 16px;
+    display: flex; gap: 6px; align-items: center;
+    box-shadow: 0 2px 16px rgba(44,36,32,0.06);
+  }
+
+  .typing-dot {
+    width: 5px; height: 5px;
+    background: var(--rose);
+    border-radius: 50%;
+    animation: breathe 1.3s infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.22s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.44s; }
+
+  @keyframes breathe {
+    0%,60%,100% { transform: scale(1); opacity: 0.35; }
+    30% { transform: scale(1.4); opacity: 1; }
+  }
+
+  /* ── INPUT ── */
+  .input-zone {
+    padding: 20px 44px 24px;
+    background: white;
+    border-top: 1px solid var(--creme-mid);
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  textarea {
+    flex: 1;
+    border: 1px solid var(--creme-mid);
+    background: var(--creme);
+    padding: 13px 18px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13.5px;
+    font-weight: 300;
+    color: var(--text);
+    resize: none;
+    outline: none;
+    min-height: 50px;
+    max-height: 140px;
+    transition: border-color 0.2s;
+    line-height: 1.7;
+    letter-spacing: 0.2px;
+    border-radius: 2px;
+  }
+
+  textarea:focus { border-color: var(--rose-light); }
+  textarea::placeholder { color: var(--text-muted); font-weight: 300; }
+  textarea:disabled { opacity: 0.4; }
+
+  .send-btn {
+    background: var(--rose);
+    color: white;
+    border: none;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(201,160,154,0.4);
+  }
+
+  .send-btn:hover {
+    background: var(--rose-deep);
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(139,94,88,0.4);
+  }
+
+  .send-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  .send-btn svg { width: 18px; height: 18px; }
+
+  /* ── MODAL BILAN ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(26,22,20,0.88);
+    z-index: 100;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--creme);
+    width: 90%; max-width: 740px;
+    max-height: 86vh;
+    display: flex; flex-direction: column;
+    border-radius: 2px;
+    border-top: 3px solid var(--rose);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+  }
+
+  .modal-header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--creme-mid);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0;
+    background: white;
+  }
+
+  .modal-title-group h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 400; font-style: italic;
+    color: var(--text);
+    letter-spacing: 1px;
+  }
+
+  .modal-date {
+    font-size: 10px; color: var(--text-muted);
+    letter-spacing: 1px; margin-top: 4px;
+  }
+
+  .modal-close {
+    background: none; border: none;
+    font-size: 20px; color: var(--text-muted);
+    cursor: pointer; width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s;
+  }
+
+  .modal-close:hover { background: var(--creme-dark); }
+
+  .modal-body {
+    padding: 32px; overflow-y: auto; flex: 1;
+    font-size: 13px; line-height: 1.85;
+    font-weight: 300;
+  }
+
+  .modal-body h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 400; font-style: italic;
+    border-bottom: 1px solid var(--rose-light);
+    padding-bottom: 14px; margin-bottom: 24px;
+    color: var(--text);
+  }
+
+  .modal-body h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px; font-weight: 400;
+    color: var(--rose-deep);
+    margin: 28px 0 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .modal-body h3 {
+    font-size: 13px; font-weight: 500;
+    color: var(--charcoal); margin: 18px 0 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .modal-body p { margin-bottom: 10px; }
+  .modal-body ul { padding-left: 20px; margin-bottom: 14px; }
+  .modal-body li { margin-bottom: 6px; }
+  .modal-body strong { font-weight: 500; color: var(--noir); }
+
+  .loading-bilan {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 70px; gap: 24px;
+  }
+
+  .loading-bilan p {
+    font-size: 11px; letter-spacing: 3px;
+    color: var(--text-muted); text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  .rose-spinner {
+    width: 36px; height: 36px;
+    border: 2px solid var(--creme-mid);
+    border-top-color: var(--rose);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- Fleur décorative en arrière-plan -->
+<svg class="camellia-bg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(100,100)">
+    <ellipse rx="35" ry="15" fill="var(--rose)" transform="rotate(0) translate(0,-30)"/>
+    <ellipse rx="35" ry="15" fill="var(--rose)" transform="rotate(45) translate(0,-30)"/>
+    <ellipse rx="35" ry="15" fill="var(--rose)" transform="rotate(90) translate(0,-30)"/>
+    <ellipse rx="35" ry="15" fill="var(--rose)" transform="rotate(135) translate(0,-30)"/>
+    <ellipse rx="35" ry="15" fill="var(--rose)" transform="rotate(180) translate(0,-30)"/>
+    <ellipse rx="35" ry="15" fill="var(--rose)" transform="rotate(225) translate(0,-30)"/>
+    <ellipse rx="35" ry="15" fill="var(--rose)" transform="rotate(270) translate(0,-30)"/>
+    <ellipse rx="35" ry="15" fill="var(--rose)" transform="rotate(315) translate(0,-30)"/>
+    <circle r="18" fill="var(--or)"/>
+    <circle r="10" fill="var(--or-light)"/>
+  </g>
+</svg>
+
+<header>
+  <div class="logo">
+    <svg class="logo-flower" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(20,20)">
+        <ellipse rx="8" ry="4" fill="var(--rose)" opacity="0.9" transform="rotate(0) translate(0,-9)"/>
+        <ellipse rx="8" ry="4" fill="var(--rose)" opacity="0.9" transform="rotate(45) translate(0,-9)"/>
+        <ellipse rx="8" ry="4" fill="var(--rose)" opacity="0.9" transform="rotate(90) translate(0,-9)"/>
+        <ellipse rx="8" ry="4" fill="var(--rose)" opacity="0.9" transform="rotate(135) translate(0,-9)"/>
+        <ellipse rx="8" ry="4" fill="var(--rose)" opacity="0.9" transform="rotate(180) translate(0,-9)"/>
+        <ellipse rx="8" ry="4" fill="var(--rose)" opacity="0.9" transform="rotate(225) translate(0,-9)"/>
+        <ellipse rx="8" ry="4" fill="var(--rose)" opacity="0.9" transform="rotate(270) translate(0,-9)"/>
+        <ellipse rx="8" ry="4" fill="var(--rose)" opacity="0.9" transform="rotate(315) translate(0,-9)"/>
+        <circle r="5" fill="var(--or)"/>
+      </g>
+    </svg>
+    <div class="logo-text">
+      <div class="logo-name">Camélia</div>
+      <div class="logo-tagline">Conseil Patrimonial</div>
+    </div>
+  </div>
+
+  <div class="header-pill" id="headerPill">
+    <span>—</span> Sélectionne ou crée un profil
+  </div>
+
+  <div class="header-actions">
+    <button class="btn btn-outline" onclick="openBilanModal()">🌸 Bilan</button>
+    <button class="btn btn-rose" onclick="startChat()">Commencer →</button>
+  </div>
+</header>
+
+<main>
+  <aside>
+    <div class="sidebar-header">
+      <div class="sidebar-label">Mes profils</div>
+      <button class="btn-new" onclick="nouveauProfil()">
+        <span>＋</span> Nouveau profil
+      </button>
+    </div>
+    <div class="profils-list" id="profilsList"></div>
+    <div class="sidebar-footer">
+      <div class="memory-dot"></div>
+      <div class="memory-text">Mémoire permanente</div>
+    </div>
+  </aside>
+
+  <div class="chat-zone">
+    <div class="welcome" id="welcomeScreen">
+      <svg class="welcome-flower" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(40,40)">
+          <ellipse rx="14" ry="6" fill="var(--rose)" transform="rotate(0) translate(0,-17)"/>
+          <ellipse rx="14" ry="6" fill="var(--rose)" transform="rotate(45) translate(0,-17)"/>
+          <ellipse rx="14" ry="6" fill="var(--rose)" transform="rotate(90) translate(0,-17)"/>
+          <ellipse rx="14" ry="6" fill="var(--rose)" transform="rotate(135) translate(0,-17)"/>
+          <ellipse rx="14" ry="6" fill="var(--rose)" transform="rotate(180) translate(0,-17)"/>
+          <ellipse rx="14" ry="6" fill="var(--rose)" transform="rotate(225) translate(0,-17)"/>
+          <ellipse rx="14" ry="6" fill="var(--rose)" transform="rotate(270) translate(0,-17)"/>
+          <ellipse rx="14" ry="6" fill="var(--rose)" transform="rotate(315) translate(0,-17)"/>
+          <circle r="10" fill="var(--or)"/>
+          <circle r="5" fill="var(--or-light)"/>
+        </g>
+      </svg>
+      <div class="welcome-title">Votre patrimoine mérite de s'épanouir.</div>
+      <div class="welcome-sub">
+        Créez un profil pour commencer<br>
+        ou sélectionnez un profil existant<br>
+        pour reprendre là où nous en étions.
+      </div>
+    </div>
+
+    <div class="messages" id="messages" style="display:none"></div>
+
+    <div class="input-zone" id="inputZone" style="display:none">
+      <textarea
+        id="userInput"
+        placeholder="Écrivez votre message..."
+        rows="1"
+        onkeydown="handleKeyDown(event)"
+        oninput="autoResize(this)"
+        disabled
+      ></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+  </div>
+</main>
+
+<!-- Modal Bilan -->
+<div class="modal-overlay" id="bilanModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <h2>Bilan Patrimonial</h2>
+        <div class="modal-date" id="bilanDate"></div>
+      </div>
+      <button class="modal-close" onclick="closeBilan()">✕</button>
+    </div>
+    <div class="modal-body" id="bilanContent"></div>
+  </div>
+</div>
+
+<script>
+  let currentProfilId = null;
+  let isLoading = false;
+
+  window.onload = async () => { await loadProfils(); };
+
+  async function loadProfils() {
+    const res = await fetch('/profils');
+    const profils = await res.json();
+    renderProfils(profils);
+  }
+
+  function renderProfils(profils) {
+    const container = document.getElementById('profilsList');
+    if (!profils.length) {
+      container.innerHTML = `<div style="padding:16px 20px;font-size:11px;color:rgba(255,255,255,0.15);font-weight:300">Aucun profil</div>`;
+      return;
+    }
+    container.innerHTML = profils.map(p => `
+      <div class="profil-item ${p.id === currentProfilId ? 'active' : ''}"
+           onclick="selectProfil(${p.id}, '${p.nom}')">
+        <div class="profil-nom">${p.nom}</div>
+        <div class="profil-meta">${p.nb_messages} messages · ${formatDate(p.updated_at)}</div>
+      </div>
+    `).join('');
+  }
+
+  async function nouveauProfil() {
+    const res = await fetch('/profil/nouveau', { method: 'POST' });
+    const profil = await res.json();
+    currentProfilId = profil.id;
+    await loadProfils();
+    showChat();
+    clearMessages();
+    updateHeader('Nouveau profil');
+    sendToAPI('Bonjour', true);
+  }
+
+  async function selectProfil(id, nom) {
+    currentProfilId = id;
+    await loadProfils();
+    showChat();
+    clearMessages();
+    updateHeader(nom);
+    sendToAPI('Je reviens pour continuer notre conversation.', true);
+  }
+
+  function startChat() {
+    if (!currentProfilId) nouveauProfil();
+  }
+
+  function showChat() {
+    document.getElementById('welcomeScreen').style.display = 'none';
+    document.getElementById('messages').style.display = 'flex';
+    document.getElementById('inputZone').style.display = 'flex';
+    document.getElementById('userInput').disabled = false;
+    document.getElementById('sendBtn').disabled = false;
+  }
+
+  function clearMessages() { document.getElementById('messages').innerHTML = ''; }
+
+  function updateHeader(nom) {
+    document.getElementById('headerPill').innerHTML =
+      `<span>${nom || 'Profil'}</span> — Session active`;
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+  }
+
+  function sendMessage() {
+    if (isLoading) return;
+    const input = document.getElementById('userInput');
+    const message = input.value.trim();
+    if (!message) return;
+    addMessage('user', message);
+    input.value = ''; input.style.height = 'auto';
+    sendToAPI(message);
+  }
+
+  function addMessage(role, content) {
+    const container = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = `message ${role === 'user' ? 'user' : 'camelia'}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = `avatar ${role === 'user' ? 'user-av' : 'camelia-av'}`;
+    avatar.innerHTML = role === 'user' ? 'C' : `<svg viewBox="0 0 24 24" width="16" height="16">
+      <g transform="translate(12,12)">
+        <ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(0) translate(0,-5)"/>
+        <ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(60) translate(0,-5)"/>
+        <ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(120) translate(0,-5)"/>
+        <ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(180) translate(0,-5)"/>
+        <ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(240) translate(0,-5)"/>
+        <ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(300) translate(0,-5)"/>
+        <circle r="3" fill="var(--or)"/>
+      </g>
+    </svg>`;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap';
+
+    const label = document.createElement('div');
+    label.className = 'sender-label';
+    label.textContent = role === 'user' ? 'Vous' : 'Camélia';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerHTML = formatMsg(content);
+
+    wrap.appendChild(label);
+    wrap.appendChild(bubble);
+    div.appendChild(avatar);
+    div.appendChild(wrap);
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function formatMsg(text) {
+    return '<p>' + text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>') + '</p>';
+  }
+
+  function showTyping() {
+    const container = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = 'typing'; div.id = 'typing-indicator';
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar camelia-av';
+    avatar.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16"><g transform="translate(12,12)"><ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(0) translate(0,-5)"/><ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(60) translate(0,-5)"/><ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(120) translate(0,-5)"/><ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(180) translate(0,-5)"/><ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(240) translate(0,-5)"/><ellipse rx="4" ry="2" fill="var(--rose)" transform="rotate(300) translate(0,-5)"/><circle r="3" fill="var(--or)"/></g></svg>`;
+    const bubble = document.createElement('div');
+    bubble.className = 'typing-bubble';
+    bubble.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    div.appendChild(avatar); div.appendChild(bubble);
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function hideTyping() {
+    const el = document.getElementById('typing-indicator');
+    if (el) el.remove();
+  }
+
+  async function sendToAPI(message, isInit = false) {
+    if (!currentProfilId) return;
+    isLoading = true;
+    setInputDisabled(true);
+    if (!isInit) showTyping();
+
+    try {
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, profil_id: currentProfilId })
+      });
+      const data = await res.json();
+      hideTyping();
+      addMessage('camelia', data.response);
+      await loadProfils();
+    } catch {
+      hideTyping();
+      addMessage('camelia', "Une erreur s'est produite. Vérifie que le serveur est bien lancé.");
+    } finally {
+      isLoading = false;
+      setInputDisabled(false);
+    }
+  }
+
+  function setInputDisabled(disabled) {
+    document.getElementById('userInput').disabled = disabled;
+    document.getElementById('sendBtn').disabled = disabled;
+  }
+
+  async function openBilanModal() {
+    if (!currentProfilId) { alert("Sélectionne d'abord un profil."); return; }
+    document.getElementById('bilanModal').classList.add('open');
+    document.getElementById('bilanContent').innerHTML = `
+      <div class="loading-bilan">
+        <div class="rose-spinner"></div>
+        <p>Génération du bilan...</p>
+      </div>`;
+    try {
+      const res = await fetch('/bilan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profil_id: currentProfilId })
+      });
+      const data = await res.json();
+      if (data.error) {
+        document.getElementById('bilanContent').innerHTML = `<p style="color:var(--text-muted);padding:20px">${data.error}</p>`;
+        return;
+      }
+      document.getElementById('bilanDate').textContent = 'Généré le ' + new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+      document.getElementById('bilanContent').innerHTML = renderMarkdown(data.bilan);
+    } catch {
+      document.getElementById('bilanContent').innerHTML = '<p style="color:var(--text-muted)">Erreur lors de la génération.</p>';
+    }
+  }
+
+  function closeBilan() { document.getElementById('bilanModal').classList.remove('open'); }
+
+  function renderMarkdown(text) {
+    return text
+      .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+      .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+      .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/^- (.*$)/gim, '<li>$1</li>')
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/^(?!<)(.+)/gm, '<p>$1</p>');
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
+  }
+</script>
+</body>
+</html>
